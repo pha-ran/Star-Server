@@ -134,10 +134,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="output.cpp" />
     <ClCompile Include="tcp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="message.h" />
+    <ClInclude Include="output.h" />
     <ClInclude Include="tcp.h" />
     <ClInclude Include="user.h" />
   </ItemGroup>
