@@ -22,11 +22,9 @@ public:
 	~TCP(void) noexcept;
 
 public:
-	void Listen(const wchar_t* ip, unsigned short port) noexcept;
+	void Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept;
 
 private:
-	SOCKET _listen;
-
 	int _id;
 	std::list<SESSION> _sessions;
 

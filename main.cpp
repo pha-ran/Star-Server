@@ -11,9 +11,10 @@
 void run(void) noexcept
 {
 	TCP tcp;
+	SOCKET listen;
 	OutputManager output;
 
-	tcp.Listen(L"0.0.0.0", 3000);
+	tcp.Listen(&listen, L"0.0.0.0", 3000);
 
 	for (;;)
 	{
@@ -21,6 +22,8 @@ void run(void) noexcept
 		output.DrawUI(0, L"0.0.0.0:3000");
 		output.PrintBuffer();
 	}
+
+	closesocket(listen);
 }
 
 int wmain(void)
