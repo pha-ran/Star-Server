@@ -1,9 +1,8 @@
 #include "tcp.h"
 #include <stdio.h>
 
-#pragma warning(disable:26495)
-
 TCP::TCP(void) noexcept
+	: _listen(-1), _id(1)
 {
 	WSADATA wsadata;
 	if (WSAStartup(0x0202, &wsadata) != 0) __debugbreak();

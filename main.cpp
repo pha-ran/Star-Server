@@ -5,6 +5,7 @@
 
 #include "tcp.h"
 #include "message.h"
+#include "user.h"
 
 int wmain(void)
 {
