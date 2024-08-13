@@ -8,6 +8,16 @@
 
 class TCP
 {
+public:
+	TCP(void) noexcept;
+	~TCP(void) noexcept;
+
+public:
+	void SetAccept(void (*func)(int id));
+	void SetReceive(void (*func)(int id));
+	void Listen(const wchar_t* ip, unsigned short port) noexcept;
+	void Receive(void) noexcept;
+
 private:
 	struct SESSION
 	{
@@ -17,15 +27,12 @@ private:
 		unsigned int _port;
 	};
 
-public:
-	TCP(void) noexcept;
-	~TCP(void) noexcept;
-
-public:
-	void Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept;
-
 private:
+	SOCKET _listen;
+
 	int _id;
 	std::list<SESSION> _sessions;
 
+	void (*_accept)(int id);
+	void (*_receive)(int id);
 };

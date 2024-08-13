@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 TCP::TCP(void) noexcept
-	: _id(1)
+	: _listen(0), _id(1), _accept(nullptr), _receive(nullptr)
 {
 	WSADATA wsadata;
 	if (WSAStartup(0x0202, &wsadata) != 0) __debugbreak();
@@ -10,15 +10,26 @@ TCP::TCP(void) noexcept
 
 TCP::~TCP(void) noexcept
 {
+	closesocket(_listen);
 	WSACleanup();
 }
 
-void TCP::Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept
+void TCP::SetAccept(void(*func)(int id))
+{
+	_accept = func;
+}
+
+void TCP::SetReceive(void(*func)(int id))
+{
+	_receive = func;
+}
+
+void TCP::Listen(const wchar_t* ip, unsigned short port) noexcept
 {
 	// socket
-	*sock = socket(AF_INET, SOCK_STREAM, 0);
+	_listen = socket(AF_INET, SOCK_STREAM, 0);
 
-	if (*sock == INVALID_SOCKET)
+	if (_listen == INVALID_SOCKET)
 	{
 		wprintf(L"socket(%d)", WSAGetLastError());
 		__debugbreak();
@@ -39,7 +50,7 @@ void TCP::Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept
 	}
 
 	// bind
-	int b = bind(*sock, (SOCKADDR*)&addr, sizeof(addr));
+	int b = bind(_listen, (SOCKADDR*)&addr, sizeof(addr));
 
 	if (b == SOCKET_ERROR)
 	{
@@ -49,7 +60,7 @@ void TCP::Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept
 
 	// ioctlsocket
 	u_long arg = 1;
-	int nb = ioctlsocket(*sock, FIONBIO, &arg);
+	int nb = ioctlsocket(_listen, FIONBIO, &arg);
 
 	if (nb == SOCKET_ERROR)
 	{
@@ -62,7 +73,7 @@ void TCP::Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept
 	linger.l_onoff = 1;
 	linger.l_linger = 0;
 
-	int opt = setsockopt(*sock, SOL_SOCKET, SO_LINGER, (char*)&linger, sizeof(linger));
+	int opt = setsockopt(_listen, SOL_SOCKET, SO_LINGER, (char*)&linger, sizeof(linger));
 
 	if (opt == SOCKET_ERROR)
 	{
@@ -71,11 +82,17 @@ void TCP::Listen(SOCKET* sock, const wchar_t* ip, unsigned short port) noexcept
 	}
 
 	// listen
-	int l = listen(*sock, SOMAXCONN_HINT(USHRT_MAX));
+	int l = listen(_listen, SOMAXCONN_HINT(USHRT_MAX));
 
 	if (l == SOCKET_ERROR)
 	{
 		wprintf(L"listen(%d)", WSAGetLastError());
 		__debugbreak();
 	}
+}
+
+void TCP::Receive(void) noexcept
+{
+	_accept(100);
+	_receive(200);
 }

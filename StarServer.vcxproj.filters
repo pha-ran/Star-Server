@@ -10,11 +10,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Contents</Filter>
-    </ClCompile>
     <ClCompile Include="tcp.cpp">
       <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="output.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Contents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -23,6 +26,12 @@
     </ClInclude>
     <ClInclude Include="tcp.h">
       <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="output.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Contents</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

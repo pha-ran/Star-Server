@@ -4,26 +4,38 @@
 #endif
 
 #include "tcp.h"
-#include "message.h"
-#include "user.h"
 #include "output.h"
+#include "player.h"
+#include "message.h"
+
+void AddPlayer(int id)
+{
+	wprintf(L"AddPlayer %d\n", id);
+}
+
+void Receive(int id)
+{
+	wprintf(L"Receive %d\n", id);
+}
 
 void run(void) noexcept
 {
 	TCP tcp;
-	SOCKET listen;
 	OutputManager output;
 
-	tcp.Listen(&listen, L"0.0.0.0", 3000);
+	tcp.SetAccept(AddPlayer);
+	tcp.SetReceive(Receive);
+	tcp.Listen(L"0.0.0.0", 3000);
 
 	for (;;)
 	{
+		tcp.Receive();
+		break;
+
 		output.ClearBuffer();
 		output.DrawUI(0, L"0.0.0.0:3000");
 		output.PrintBuffer();
 	}
-
-	closesocket(listen);
 }
 
 int wmain(void)

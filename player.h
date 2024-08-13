@@ -1,6 +1,6 @@
 #pragma once
 
-struct USER
+struct PLAYER
 {
 	int _id;
 	int _x;
